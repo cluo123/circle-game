@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Packing Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            flex-shrink: 0;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #ff6b9d;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 32px;
+            text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.3);
+            font-weight: bold;
+        }
+
+        h2 {
+            color: #4ecdc4;
+            margin-bottom: 15px;
+            font-size: 18px;
+            padding-bottom: 8px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 13px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #e0f7fa;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: #f0fdff;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            background: white;
+            transform: scale(1.02);
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a8b3 100%);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .reset-btn:hover {
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        .canvas-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #canvas {
+            border: 4px solid white;
+            background-color: #fefefe;
+            cursor: crosshair;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+        }
+
+        .stats {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(253, 203, 110, 0.3);
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 6px 10px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .stat-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e17055;
+        }
+
+        .hint {
+            padding: 10px;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+
+        .delete-hint {
+            background: linear-gradient(135deg, #fab1a0 0%, #ff7675 100%);
+            color: white;
+        }
+
+        .warning-hint {
+            background: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
+            color: white;
+        }
+
+        .emoji {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sidebar {
+                width: 100%;
+                max-width: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Circle Packing Game</h1>
+    
+    <div class="container">
+        <div class="sidebar">
+            <div class="section">
+                <h2>⚙️ Settings</h2>
+                <div class="input-group">
+                    <label>Grid Width (10-200):</label>
+                    <input type="number" id="gridX" value="100" min="10" max="200">
+                </div>
+                <div class="input-group">
+                    <label>Grid Height (10-200):</label>
+                    <input type="number" id="gridY" value="100" min="10" max="200">
+                </div>
+                <div class="input-group">
+                    <label>Circle Radius (grid units):</label>
+                    <input type="number" id="radius" value="11" min="1" max="50" step="0.1">
+                </div>
+                <button onclick="initGame()">🎮 Start Game</button>
+                <button class="reset-btn" onclick="resetGame()">🔄 Reset</button>
+            </div>
+
+            <div class="section">
+                <h2>📊 Stats</h2>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Circles:</span>
+                        <span class="stat-value" id="circleCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Cells:</span>
+                        <span class="stat-value" id="cellCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Coverage:</span>
+                        <span class="stat-value" id="fillRate">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="hint delete-hint" id="deleteHint">
+                    <span class="emoji">🗑️</span>Right-click to delete
+                </div>
+                <div class="hint warning-hint" id="warningHint">
+                    <span class="emoji">⚠️</span>Can't place here!
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="canvas" width="800" height="800"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let gridX, gridY, radius;
+        let cellWidth, cellHeight;
+        let occupiedCells = new Set();
+        let cellToCircleMap = new Map();
+        let placedCircles = [];
+        let previewCircle = null;
+        let gameInitialized = false;
+        let hoveredCircleIndex = -1;
+        let canPlacePreview = true;
+        
+        function initGame() {
+            gridX = parseInt(document.getElementById('gridX').value);
+            gridY = parseInt(document.getElementById('gridY').value);
+            radius = parseFloat(document.getElementById('radius').value);
+            
+            if (gridX < 10 || gridX > 200 || gridY < 10 || gridY > 200) {
+                alert('Grid size must be between 10-200');
+                return;
+            }
+            
+            if (radius < 1 || radius > 50) {
+                alert('Radius must be between 1-50');
+                return;
+            }
+            
+            cellWidth = canvas.width / gridX;
+            cellHeight = canvas.height / gridY;
+            
+            occupiedCells.clear();
+            cellToCircleMap.clear();
+            placedCircles = [];
+            gameInitialized = true;
+            
+            updateInfo();
+            drawGrid();
+        }
+        
+        function resetGame() {
+            if (!gameInitialized) {
+                alert('Please start the game first!');
+                return;
+            }
+            occupiedCells.clear();
+            cellToCircleMap.clear();
+            placedCircles = [];
+            hoveredCircleIndex = -1;
+            updateInfo();
+            drawGrid();
+            document.getElementById('deleteHint').style.display = 'none';
+            document.getElementById('warningHint').style.display = 'none';
+        }
+        
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#e8f5e9';
+            ctx.lineWidth = 0.5;
+            
+            for (let i = 0; i <= gridX; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * cellWidth, 0);
+                ctx.lineTo(i * cellWidth, canvas.height);
+                ctx.stroke();
+            }
+            
+            for (let j = 0; j <= gridY; j++) {
+                ctx.beginPath();
+                ctx.moveTo(0, j * cellHeight);
+                ctx.lineTo(canvas.width, j * cellHeight);
+                ctx.stroke();
+            }
+            
+            // Draw placed circles
+            placedCircles.forEach((circle, index) => {
+                const isHovered = (index === hoveredCircleIndex);
+                drawCircle(circle.nodeX, circle.nodeY, circle.cells, true, index, isHovered);
+            });
+            
+            // Draw preview circle
+            if (previewCircle && hoveredCircleIndex === -1) {
+                drawCircle(previewCircle.nodeX, previewCircle.nodeY, previewCircle.cells, false, 0, false, canPlacePreview);
+            }
+        }
+        
+        function getCircleCells(nodeX, nodeY, includeOutOfBounds = false) {
+            const cells = [];
+            const centerX = nodeX * cellWidth;
+            const centerY = nodeY * cellHeight;
+            
+            const radiusInPixels = radius * cellWidth;
+            
+            const minI = Math.floor(nodeX - radius - 1);
+            const maxI = Math.ceil(nodeX + radius + 1);
+            const minJ = Math.floor(nodeY - radius - 1);
+            const maxJ = Math.ceil(nodeY + radius + 1);
+            
+            for (let i = minI; i <= maxI; i++) {
+                for (let j = minJ; j <= maxJ; j++) {
+                    const cellCenterX = (i + 0.5) * cellWidth;
+                    const cellCenterY = (j + 0.5) * cellHeight;
+                    const distance = Math.sqrt(
+                        Math.pow(cellCenterX - centerX, 2) + 
+                        Math.pow(cellCenterY - centerY, 2)
+                    );
+                    
+                    if (distance <= radiusInPixels) {
+                        if (includeOutOfBounds || (i >= 0 && i < gridX && j >= 0 && j < gridY)) {
+                            cells.push({i, j, outOfBounds: i < 0 || i >= gridX || j < 0 || j >= gridY});
+                        } else if (!includeOutOfBounds && (i < 0 || i >= gridX || j < 0 || j >= gridY)) {
+                            cells.push({i, j, outOfBounds: true});
+                        }
+                    }
+                }
+            }
+            
+            return cells;
+        }
+        
+        function drawCircle(nodeX, nodeY, cells, isPlaced, circleIndex = 0, isHovered = false, canPlace = true) {
+            const inBoundsCells = cells.filter(cell => !cell.outOfBounds);
+            const outOfBoundsCells = cells.filter(cell => cell.outOfBounds);
+            
+            // Fill in-bounds cells
+            inBoundsCells.forEach(cell => {
+                if (isPlaced) {
+                    const hue = (circleIndex * 137.5) % 360;
+                    const alpha = isHovered ? 0.85 : 0.6;
+                    ctx.fillStyle = `hsla(${hue}, 75%, 70%, ${alpha})`;
+                } else {
+                    if (canPlace) {
+                        ctx.fillStyle = 'rgba(78, 205, 196, 0.3)';
+                    } else {
+                        ctx.fillStyle = 'rgba(255, 107, 157, 0.3)';
+                    }
+                }
+                ctx.fillRect(cell.i * cellWidth, cell.j * cellHeight, cellWidth, cellHeight);
+            });
+            
+            // Draw out-of-bounds cells in red
+            if (!isPlaced && outOfBoundsCells.length > 0) {
+                ctx.fillStyle = 'rgba(255, 107, 157, 0.6)';
+                outOfBoundsCells.forEach(cell => {
+                    const x = cell.i * cellWidth;
+                    const y = cell.j * cellHeight;
+                    
+                    const visibleX = Math.max(0, Math.min(canvas.width, x));
+                    const visibleY = Math.max(0, Math.min(canvas.height, y));
+                    const visibleWidth = Math.max(0, Math.min(canvas.width - x, cellWidth));
+                    const visibleHeight = Math.max(0, Math.min(canvas.height - y, cellHeight));
+                    
+                    if (visibleWidth > 0 && visibleHeight > 0) {
+                        ctx.fillRect(visibleX, visibleY, visibleWidth, visibleHeight);
+                    }
+                });
+            }
+            
+            // Draw contour
+            const contourCells = getContourCells(cells);
+            if (isHovered) {
+                ctx.strokeStyle = '#ff6b9d';
+                ctx.lineWidth = 3;
+            } else if (!isPlaced && !canPlace) {
+                ctx.strokeStyle = '#ff6b9d';
+                ctx.lineWidth = 2;
+            } else {
+                ctx.strokeStyle = isPlaced ? '#555' : '#4ecdc4';
+                ctx.lineWidth = isPlaced ? 2 : 1.5;
+            }
+            
+            contourCells.forEach(segment => {
+                ctx.beginPath();
+                ctx.moveTo(segment.x1, segment.y1);
+                ctx.lineTo(segment.x2, segment.y2);
+                ctx.stroke();
+            });
+            
+            // Draw center point
+            if (isHovered) {
+                ctx.fillStyle = '#ff6b9d';
+                ctx.beginPath();
+                ctx.arc(nodeX * cellWidth, nodeY * cellHeight, 5, 0, 2 * Math.PI);
+                ctx.fill();
+            } else if (!isPlaced && !canPlace) {
+                ctx.fillStyle = '#ff6b9d';
+                ctx.beginPath();
+                ctx.arc(nodeX * cellWidth, nodeY * cellHeight, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            } else {
+                ctx.fillStyle = isPlaced ? '#e17055' : '#4ecdc4';
+                ctx.beginPath();
+                ctx.arc(nodeX * cellWidth, nodeY * cellHeight, 3, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+        
+        function getContourCells(cells) {
+            const cellSet = new Set(cells.map(c => `${c.i},${c.j}`));
+            const segments = [];
+            
+            cells.forEach(cell => {
+                const {i, j} = cell;
+                
+                if (!cellSet.has(`${i},${j-1}`)) {
+                    segments.push({
+                        x1: i * cellWidth, y1: j * cellHeight,
+                        x2: (i + 1) * cellWidth, y2: j * cellHeight
+                    });
+                }
+                if (!cellSet.has(`${i},${j+1}`)) {
+                    segments.push({
+                        x1: i * cellWidth, y1: (j + 1) * cellHeight,
+                        x2: (i + 1) * cellWidth, y2: (j + 1) * cellHeight
+                    });
+                }
+                if (!cellSet.has(`${i-1},${j}`)) {
+                    segments.push({
+                        x1: i * cellWidth, y1: j * cellHeight,
+                        x2: i * cellWidth, y2: (j + 1) * cellHeight
+                    });
+                }
+                if (!cellSet.has(`${i+1},${j}`)) {
+                    segments.push({
+                        x1: (i + 1) * cellWidth, y1: j * cellHeight,
+                        x2: (i + 1) * cellWidth, y2: (j + 1) * cellHeight
+                    });
+                }
+            });
+            
+            return segments;
+        }
+        
+        function canPlaceCircle(cells) {
+            for (let cell of cells) {
+                if (cell.i < 0 || cell.i >= gridX || cell.j < 0 || cell.j >= gridY) {
+                    return false;
+                }
+                const key = `${cell.i},${cell.j}`;
+                if (occupiedCells.has(key)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        function placeCircle(nodeX, nodeY, cells) {
+            const circleIndex = placedCircles.length;
+            const validCells = cells.filter(cell => !cell.outOfBounds);
+            validCells.forEach(cell => {
+                const key = `${cell.i},${cell.j}`;
+                occupiedCells.add(key);
+                cellToCircleMap.set(key, circleIndex);
+            });
+            placedCircles.push({nodeX, nodeY, cells: validCells});
+            updateInfo();
+        }
+        
+        function removeCircle(index) {
+            const circle = placedCircles[index];
+            circle.cells.forEach(cell => {
+                const key = `${cell.i},${cell.j}`;
+                occupiedCells.delete(key);
+                cellToCircleMap.delete(key);
+            });
+            placedCircles.splice(index, 1);
+            
+            cellToCircleMap.clear();
+            placedCircles.forEach((circle, newIndex) => {
+                circle.cells.forEach(cell => {
+                    const key = `${cell.i},${cell.j}`;
+                    cellToCircleMap.set(key, newIndex);
+                });
+            });
+            
+            updateInfo();
+        }
+        
+        function findCircleAtCell(cellI, cellJ) {
+            const key = `${cellI},${cellJ}`;
+            if (cellToCircleMap.has(key)) {
+                return cellToCircleMap.get(key);
+            }
+            return -1;
+        }
+        
+        function updateInfo() {
+            document.getElementById('circleCount').textContent = placedCircles.length;
+            document.getElementById('cellCount').textContent = occupiedCells.size;
+            const totalCells = gridX * gridY;
+            const fillRate = ((occupiedCells.size / totalCells) * 100).toFixed(1);
+            document.getElementById('fillRate').textContent = fillRate + '%';
+        }
+        
+        canvas.addEventListener('mousemove', (e) => {
+            if (!gameInitialized) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const cellI = Math.floor(x / cellWidth);
+            const cellJ = Math.floor(y / cellHeight);
+            
+            hoveredCircleIndex = findCircleAtCell(cellI, cellJ);
+            
+            if (hoveredCircleIndex !== -1) {
+                previewCircle = null;
+                document.getElementById('deleteHint').style.display = 'block';
+                document.getElementById('warningHint').style.display = 'none';
+            } else {
+                document.getElementById('deleteHint').style.display = 'none';
+                
+                const nodeX = Math.round(x / cellWidth);
+                const nodeY = Math.round(y / cellHeight);
+                
+                if (nodeX >= 0 && nodeX <= gridX && nodeY >= 0 && nodeY <= gridY) {
+                    const cells = getCircleCells(nodeX, nodeY, true);
+                    canPlacePreview = canPlaceCircle(cells);
+                    previewCircle = {nodeX, nodeY, cells};
+                    
+                    if (!canPlacePreview) {
+                        document.getElementById('warningHint').style.display = 'block';
+                    } else {
+                        document.getElementById('warningHint').style.display = 'none';
+                    }
+                }
+            }
+            
+            drawGrid();
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            previewCircle = null;
+            hoveredCircleIndex = -1;
+            document.getElementById('deleteHint').style.display = 'none';
+            document.getElementById('warningHint').style.display = 'none';
+            if (gameInitialized) {
+                drawGrid();
+            }
+        });
+        
+        canvas.addEventListener('click', (e) => {
+            if (!gameInitialized || !previewCircle) return;
+            
+            if (canPlaceCircle(previewCircle.cells)) {
+                placeCircle(previewCircle.nodeX, previewCircle.nodeY, previewCircle.cells);
+                drawGrid();
+            } else {
+                alert('⚠️ Cannot place circle here!');
+            }
+        });
+        
+        canvas.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            
+            if (!gameInitialized) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const cellI = Math.floor(x / cellWidth);
+            const cellJ = Math.floor(y / cellHeight);
+            
+            const circleIndex = findCircleAtCell(cellI, cellJ);
+            
+            if (circleIndex !== -1) {
+                removeCircle(circleIndex);
+                hoveredCircleIndex = -1;
+                previewCircle = null;
+                document.getElementById('deleteHint').style.display = 'none';
+                document.getElementById('warningHint').style.display = 'none';
+                drawGrid();
+            }
+        });
+        
+        window.addEventListener('load', () => {
+            initGame();
+        });
+    </script>
+</body>
+</html>
