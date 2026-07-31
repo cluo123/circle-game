@@ -18,6 +18,75 @@
             padding: 20px;
         }
 
+        /* Home Page Styles */
+        .home-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+
+        .home-title {
+            color: #ff6b9d;
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 48px;
+            text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.3);
+            font-weight: bold;
+        }
+
+        .mode-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .mode-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .mode-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .mode-title {
+            color: #4ecdc4;
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .mode-description {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Game Page Styles */
+        .game-page {
+            display: none;
+        }
+
+        .game-page.active {
+            display: block;
+        }
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -68,7 +137,7 @@
             font-size: 13px;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 8px 12px;
             border: 2px solid #e0f7fa;
@@ -78,7 +147,7 @@
             background: #f0fdff;
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: #4ecdc4;
             background: white;
@@ -116,6 +185,25 @@
 
         .reset-btn:hover {
             box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .back-btn:hover {
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            color: #333;
+            box-shadow: 0 4px 15px rgba(253, 203, 110, 0.3);
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 6px 20px rgba(253, 203, 110, 0.4);
         }
 
         .canvas-container {
@@ -227,6 +315,116 @@
             margin-right: 8px;
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            animation: modalPop 0.3s ease-out;
+        }
+
+        @keyframes modalPop {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 32px;
+            color: #ff6b9d;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .modal-message {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a8b3 100%);
+            color: white;
+        }
+
+        .modal-btn-secondary {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .challenge-info {
+            background: linear-gradient(135deg, #74b9ff 0%, #a29bfe 100%);
+            padding: 15px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .challenge-level {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .challenge-target {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
         @media (max-width: 1200px) {
             .container {
                 flex-direction: column;
@@ -241,73 +439,117 @@
     </style>
 </head>
 <body>
-    <h1>🎨 Circle Packing Game</h1>
-    
-    <div class="container">
-        <div class="sidebar">
-            <div class="section">
-                <h2>⚙️ Settings</h2>
-                <div class="input-group">
-                    <label>Grid Width (10-200):</label>
-                    <input type="number" id="gridX" value="100" min="10" max="200">
-                </div>
-                <div class="input-group">
-                    <label>Grid Height (10-200):</label>
-                    <input type="number" id="gridY" value="100" min="10" max="200">
-                </div>
-                <div class="input-group">
-                    <label>Circle Radius (grid units):</label>
-                    <input type="number" id="radius" value="11" min="1" max="50" step="0.1">
-                </div>
-                <button onclick="initGame()">🎮 Start Game</button>
-                <button class="reset-btn" onclick="resetGame()">🔄 Reset</button>
-            </div>
-
-            <div class="section">
-                <h2>📊 Stats</h2>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Circles:</span>
-                        <span class="stat-value" id="circleCount">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Cells:</span>
-                        <span class="stat-value" id="cellCount">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Coverage:</span>
-                        <span class="stat-value" id="fillRate">0%</span>
-                    </div>
+    <!-- Home Page -->
+    <div id="homePage" class="home-page">
+        <h1 class="home-title">🎨 Circle Packing Game</h1>
+        <div class="mode-container">
+            <div class="mode-card" onclick="startMode('explore')">
+                <div class="mode-icon">🔍</div>
+                <div class="mode-title">Self-Exploration</div>
+                <div class="mode-description">
+                    Freely explore and pack circles at your own pace. Experiment with different configurations and strategies!
                 </div>
             </div>
-
-            <div class="section">
-                <h2>📖 How to Play</h2>
-                <div class="instructions">
-                    <div class="instructions-content">
-                        <p>🎯 Goal: Pack as many circles as possible!</p>
-                        <ul>
-                            <li><strong>Left-click</strong> on grid nodes to place circles</li>
-                            <li><strong>Right-click</strong> on any cell in a circle to delete it</li>
-                            <li>Circles cannot overlap or go outside the boundary</li>
-                            <li>Hover to preview placement</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="hint delete-hint" id="deleteHint">
-                    <span class="emoji">🗑️</span>Right-click to delete
-                </div>
-                <div class="hint warning-hint" id="warningHint">
-                    <span class="emoji">⚠️</span>Can't place here!
+            <div class="mode-card" onclick="startMode('challenge')">
+                <div class="mode-icon">🎯</div>
+                <div class="mode-title">Game Challenge</div>
+                <div class="mode-description">
+                    Take on preset challenges! Try to match or beat the optimal circle packing for each level.
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="canvas-container">
-            <canvas id="canvas" width="800" height="800"></canvas>
+    <!-- Game Page -->
+    <div id="gamePage" class="game-page">
+        <h1 id="gameTitle">🎨 Circle Packing Game</h1>
+        
+        <div class="container">
+            <div class="sidebar">
+                <div id="challengeInfo" class="challenge-info" style="display: none;">
+                    <div class="challenge-level">Level <span id="currentLevel">1</span></div>
+                    <div class="challenge-target">Target: <span id="targetCircles">0</span> circles</div>
+                </div>
+
+                <div class="section">
+                    <h2>⚙️ Settings</h2>
+                    <div class="input-group">
+                        <label>Grid Width (10-200):</label>
+                        <input type="number" id="gridX" value="100" min="10" max="200">
+                    </div>
+                    <div class="input-group">
+                        <label>Grid Height (10-200):</label>
+                        <input type="number" id="gridY" value="100" min="10" max="200">
+                    </div>
+                    <div class="input-group">
+                        <label>Circle Radius (grid units):</label>
+                        <input type="number" id="radius" value="11" min="1" max="50" step="0.1">
+                    </div>
+                    <button onclick="initGame()">🎮 Start Game</button>
+                    <button class="reset-btn" onclick="resetGame()">🔄 Reset</button>
+                    <button id="submitBtn" class="submit-btn" onclick="submitChallenge()" style="display: none;">✅ Submit</button>
+                    <button class="back-btn" onclick="backToHome()">🏠 Back to Home</button>
+                </div>
+
+                <div class="section">
+                    <h2>📊 Stats</h2>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Circles:</span>
+                            <span class="stat-value" id="circleCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Cells:</span>
+                            <span class="stat-value" id="cellCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Coverage:</span>
+                            <span class="stat-value" id="fillRate">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>📖 How to Play</h2>
+                    <div class="instructions">
+                        <div class="instructions-content">
+                            <p>🎯 Goal: Pack as many circles as possible!</p>
+                            <ul>
+                                <li><strong>Left-click</strong> on grid nodes to place circles</li>
+                                <li><strong>Right-click</strong> on any cell in a circle to delete it</li>
+                                <li>Circles cannot overlap or go outside the boundary</li>
+                                <li>Hover to preview placement</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="hint delete-hint" id="deleteHint">
+                        <span class="emoji">🗑️</span>Right-click to delete
+                    </div>
+                    <div class="hint warning-hint" id="warningHint">
+                        <span class="emoji">⚠️</span>Can't place here!
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="canvas" width="800" height="800"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon" id="modalIcon">🎉</div>
+            <div class="modal-title" id="modalTitle">Great Job!</div>
+            <div class="modal-message" id="modalMessage">You matched the target!</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-primary" id="modalPrimaryBtn" onclick="nextLevel()">Next Level</button>
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal()">Close</button>
+            </div>
         </div>
     </div>
 
@@ -324,6 +566,105 @@
         let gameInitialized = false;
         let hoveredCircleIndex = -1;
         let canPlacePreview = true;
+        
+        // Game mode variables
+        let currentMode = 'explore'; // 'explore' or 'challenge'
+        let currentChallengeLevel = 0;
+        
+        // Challenge levels data
+        const challengeLevels = [
+            { gridX: 100, gridY: 100, radius: 11, target: 19 },
+            { gridX: 90, gridY: 90, radius: 9.9, target: 19 },
+            { gridX: 100, gridY: 100, radius: 17.2, target: 7 },
+            { gridX: 100, gridY: 100, radius: 14.5, target: 10 },
+            { gridX: 100, gridY: 100, radius: 13, target: 13 }
+        ];
+        
+        function startMode(mode) {
+            currentMode = mode;
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('gamePage').classList.add('active');
+            
+            if (mode === 'challenge') {
+                currentChallengeLevel = 0;
+                loadChallengeLevel();
+                document.getElementById('submitBtn').style.display = 'block';
+                document.getElementById('challengeInfo').style.display = 'block';
+                document.getElementById('gameTitle').textContent = '🎯 Challenge Mode';
+            } else {
+                document.getElementById('submitBtn').style.display = 'none';
+                document.getElementById('challengeInfo').style.display = 'none';
+                document.getElementById('gameTitle').textContent = '🔍 Exploration Mode';
+                initGame();
+            }
+        }
+        
+        function loadChallengeLevel() {
+            if (currentChallengeLevel >= challengeLevels.length) {
+                showModal('🏆', 'Congratulations!', 'You completed all challenges!', false);
+                return;
+            }
+            
+            const level = challengeLevels[currentChallengeLevel];
+            document.getElementById('gridX').value = level.gridX;
+            document.getElementById('gridY').value = level.gridY;
+            document.getElementById('radius').value = level.radius;
+            document.getElementById('currentLevel').textContent = currentChallengeLevel + 1;
+            document.getElementById('targetCircles').textContent = level.target;
+            
+            // Disable input fields in challenge mode
+            document.getElementById('gridX').disabled = true;
+            document.getElementById('gridY').disabled = true;
+            document.getElementById('radius').disabled = true;
+            
+            initGame();
+        }
+        
+        function backToHome() {
+            document.getElementById('homePage').style.display = 'flex';
+            document.getElementById('gamePage').classList.remove('active');
+            
+            // Re-enable input fields
+            document.getElementById('gridX').disabled = false;
+            document.getElementById('gridY').disabled = false;
+            document.getElementById('radius').disabled = false;
+            
+            resetGame();
+        }
+        
+        function submitChallenge() {
+            if (currentMode !== 'challenge') return;
+            
+            const level = challengeLevels[currentChallengeLevel];
+            const playerCircles = placedCircles.length;
+            const targetCircles = level.target;
+            
+            if (playerCircles === targetCircles) {
+                showModal('🎉', 'Great Job!', `You matched the target!`, true);
+            } else if (playerCircles < targetCircles) {
+                showModal('😅', 'Try it again!', `You placed ${playerCircles} circles, but the target is more. Keep trying!`, false);
+            } else {
+                showModal('🌟', 'Amazing!', `Wow! You placed ${playerCircles} circles, which is more than the computer algorithm (${targetCircles})! You're a genius!`, true);
+            }
+        }
+        
+        function showModal(icon, title, message, showNextBtn) {
+            document.getElementById('modalIcon').textContent = icon;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modalPrimaryBtn').style.display = showNextBtn ? 'block' : 'none';
+            document.getElementById('modal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+        
+        function nextLevel() {
+            closeModal();
+            currentChallengeLevel++;
+            loadChallengeLevel();
+        }
         
         function initGame() {
             gridX = parseInt(document.getElementById('gridX').value);
@@ -689,10 +1030,6 @@
                 document.getElementById('warningHint').style.display = 'none';
                 drawGrid();
             }
-        });
-        
-        window.addEventListener('load', () => {
-            initGame();
         });
     </script>
 </body>
